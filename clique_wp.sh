@@ -183,6 +183,43 @@ wp rewrite flush
 # One last step with the database, let's optimize it
 wp db optimize --quiet
 
+echo -e "Updating plugins."
+wp plugin update --all
+
+wp plugin activate mainwp-child
+wp plugin activate wp-accessibility
+
+echo -e "Activate additional default plugins? [y/n]"
+if [ "$disableComments" = 'y' ]
+then
+    echo -e "${VP_YELLOW}Activate Gravity Forms? [y/n]"
+    read gravityForms
+    
+    echo -e "${VP_YELLOW}Activate Sitemap? [y/n]"
+    read sitemap
+    
+    echo -e "${VP_YELLOW}Activate Yoast SEO? [y/n]${VP_WHITE}"
+    read yoastSEO
+
+    if [ "$gravityForms" = 'y' ]
+    then
+        wp plugin activate gravityforms
+        wp plugin activate gravity-forms-wcag-20-form-fields
+    fi
+    
+    if [ "$sitemap" = 'y' ]
+    then
+        wp plugin activate sitemap
+    fi
+    
+    if [ "$yoastSEO" = 'y' ]
+    then
+        wp plugin activate wordpress-seo
+        wp plugin install acf-content-analysis-for-yoast-seo --activate
+    fi
+
+fi
+
 # Clean up some root installation files
 echo -e "${VP_RED}Deleting ${VP_BOLD}import.sql${VP_NONE} and the ${VP_BOLD}duplicator.zip${VP_NONE} files.${VP_WHITE}"
 rm -rf ./*.zip
