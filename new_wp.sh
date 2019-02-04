@@ -53,6 +53,7 @@ echo ""
 [ -z "$wpVersion" ] && wp core download || wp core download --version=$wpVersion
 
 ## Create the wp-config file and the database
+echo -e "${VP_PURPLE}Creating database and setting up wp-config.php file.${VP_WHITE}"
 wp config create --dbname=wp_$dbName --dbuser=root --dbpass=root --extra-php <<PHP
 define( 'WP_DEBUG', true);
 define( 'WP_DEBUG_LOG', true );
@@ -62,12 +63,17 @@ wp db create
 
 if [ $? -eq 0 ]
 then
-    echo -e "${VP_GREEN}reating database and setting up wp-config.php file."
-    echo -e "All set.${VP_WHITE}"
+    echo -e "${VP_GREEN}All set.${VP_WHITE}"
 else
     rm -rf wp-config.php
     echo -e "${VP_RED}Database 'wp_$dbName' exists. Please enter another db name."
-    wp config create --dbname=wp_$dbName --dbuser=root --dbpass=root --force --extra-php <<PHP
+    
+    echo -e "Enter your chosen database name."
+    echo -e "${VP_WHITE}Note, wp_ is automatically prefixed"
+    read dbNameReTry
+    echo ""
+
+    wp config create --dbname=wp_$dbNameReTry --dbuser=root --dbpass=root --force --extra-php <<PHP
 define( 'WP_DEBUG', true);
 define( 'WP_DEBUG_LOG', true );
 define( 'WP_DEBUG_DISPLAY', false );
