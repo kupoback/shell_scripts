@@ -13,7 +13,7 @@ This shell script sets up a new WordPress isntall on your local machine with the
 Version 0.2
 
 * Added in `wp plugin update --all` to update all plugins on `clique_wp.sh`
-* Added in auto activate for WP-Accessibility and MainWP-Child
+* Added in auto activate for WP-Accessibility
 * Added in conditional for additional plugin activation on `clique_wp.sh`
 
 Version 0.1
