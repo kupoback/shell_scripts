@@ -209,7 +209,7 @@ echo -e "${VP_GREEN}Back End${VP_WHITE}: ${VP_UNDERLINE}$url/wp-admin${VP_NONE}"
 echo -e "${VP_GREEN}Username:${VP_WHITE} admin"
 echo -e "${VP_GREEN}Password:${VP_WHITE} Cl!que2019"
 echo ""
-echo -e "${VP_RED}Due to the copied files being generated from a duplicator package, you will need to head here to clean up any files. ${VP_UNDERLINE}${VP_WHITE}https://$url/wp-admin/admin.php?page=duplicator-tools&tab=diagnostics${VP_NONE}${VP_WHITE}"
+echo -e "${VP_RED}Due to the copied files being generated from a duplicator package, you will need to head here to clean up any files. ${VP_UNDERLINE}${VP_WHITE}$url/wp-admin/admin.php?page=duplicator-tools&tab=diagnostics${VP_NONE}${VP_WHITE}"
 echo -e "${VP_GREEN}Exiting script.${VP_NONE}${VP_WHITE}"
 
 exit 0
