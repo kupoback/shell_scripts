@@ -56,6 +56,8 @@ cp -a ./*.zip $installPath
 cd $installPath
 unzip -q ./*.zip
 
+wp core update
+
 # Copy the .sql file, and rename it
 cp ./dup-installer/*.sql ./import.sql
 
@@ -186,6 +188,7 @@ wp db optimize --quiet
 echo -e "Updating plugins."
 wp plugin update --all
 
+wp plugin install classic-editor --activate
 wp plugin activate wp-accessibility
 
 echo -e "Activate additional default plugins? [y/n]"
