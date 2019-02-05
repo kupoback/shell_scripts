@@ -25,7 +25,8 @@ fi
 echo -e "${VP_CYAN}This bash script is under the assumption that you are using valet-plus to set up this WordPress install.${VP_NONE}"
 echo -e "${VP_CYAN}${VP_BOLD}This script will now clear your terminal window.${VP_NONE}"
 echo ""
-echo -e "${VP_WHITE}${VP_BOLD}Please press enter to continue."; read clearTerminal
+echo -e "${VP_WHITE}${VP_BOLD}Please press enter to continue."; 
+read clearTerminal
 
 clear
 
@@ -34,18 +35,22 @@ echo -e "${VP_RED}${VP_BOLD}You may be asked twice for your password, but this i
 sudo -v
 
 # Set the Site Name
-echo -e "Enter the site name."; read siteName
+echo -e "Enter the site name."; 
+read siteName
 echo ""
 
 # Set the database name
 echo -e "Enter your chosen database name."
-echo -e "${VP_WHITE}Note, wp_ is automatically prefixed"; read dbName
+echo -e "${VP_WHITE}Note, wp_ is automatically prefixed"; 
+read dbName
 echo ""
 
-echo -e "Enter your database user name if it differs from root, otherwise hit enter."; read dbUser
+echo -e "Enter your database user name if it differs from root, otherwise hit enter."; 
+read dbUser
 echo ""
 
-echo -e "Enter your database password if it differs from root, otherwise hit enter."; read dbPassword
+echo -e "Enter your database password if it differs from root, otherwise hit enter.";
+read dbPassword
 echo ""
 
 # If a $dbUser was not entered, we'll default to valet-plus' mysql username
@@ -55,7 +60,8 @@ echo ""
 [ -z "$dbPassword" ] && $dbPassword = 'root'
 
 # Let's double check the WordPress version they want to download
-echo -e "${VP_PURPLE}If you'd like to download a different version number, please enter in the number, otherwise, just press enter.${VP_WHITE}"; read wpVersion
+echo -e "${VP_PURPLE}If you'd like to download a different version number, please enter in the number, otherwise, just press enter.${VP_WHITE}"; 
+read wpVersion
 echo ""
 
 # Start downloading WordPress and it's latest version
