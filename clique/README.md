@@ -1,7 +1,6 @@
 # Clique Studios Local Backend WP Install
 
 ## Prerequisites:
-___
 * Install `valet` or `valet-plus`
 * If running `valet`, install `wp-cli`
 * `mkdir` a folder in your `/Sites/` folder, or whever you have `valet park` set with a sub-dir for the **`wp-boilerplate` [repository][1]**
@@ -12,7 +11,6 @@ ___
 		* You can run `.app` as your domain, but you WILL need to create an SSL certificate for each folder you have parked, which this script does automatically.
 
 ## Description
-___
 The following below describes what this shell script does.
 
 * Asks for a few prompts for you to fill in : your password (for `valet`), the sitename, blog description *(optional)*, database name, database password,
@@ -45,23 +43,27 @@ The following below describes what this shell script does.
   * I find it best to run local sites via SSL to mimic the live site to it’s truest form
 * The final thing on screen will showcase the domain you can command click on to access the front-end, a link to access the back end, the login creds based on the repo, and a link to Duplicators cleanup files.
 
+## Postfase
 Unfortunately since the repo file is `zip` and not `tar.gz` it take a little longer.
 
 This is my first complex automate as much as possible script, and when starting `SAWS` I was able to get everything setup in under 2 minutes.
 
-If you wanna try it, I suggest creating a `.custom_bash_scripts`dir on `$HOME` and adding that folder to your path. Then running `chmod 755 clique_wp.sh` followed by `source ~/.bash_profile` or `source ~/.bashrc` where ever you’re storing your `PATH` declarations.
-
 ### [Download the Bash Script][2]
 
+If you wanna try it, I suggest creating a `.custom_bash_scripts` dir on `$HOME` or `$USER$` and adding that folder to your path.
 
-This will be my baby and maintenance will be on going, so PLEASE any issues you encounter OR any improvements you feel I would make, create tickets here: https://github.com/kupoback/shell_scripts/issues
+* Example: `export PATH="$PATH:$HOME/.custom_bash_scripts:$PATH"`
+
+Running the command in terminal `chmod 755 clique_wp.sh` followed by `source ~/.bash_profile` or `source ~/.bashrc` where ever you’re storing your `PATH` declarations, will allow you to then call to the shell script in terminal wherever.
+
+This will be my baby and maintenance will be on going, so PLEASE any issues you encounter OR any improvements you feel I would make, create tickets [here][3].
 
 ## @TODO List
-___
 
 * **@TODO**: Allow the addition of sub pages, but will need to rethink the logic on this
 
 
 <!-- Links -->
 [1]:https://bitbucket.org/clique_studios/wp-boilerplate/src/master/
-[2]:https://github.com/kupoback/shell_scripts/blob/master/clique_wp.sh
+[2]:https://github.com/kupoback/shell_scripts/blob/master/clique/clique_wp.sh
+[3]:https://github.com/kupoback/shell_scripts/issues
