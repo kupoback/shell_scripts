@@ -16,6 +16,7 @@ folderPath=$HOME/Sites/
 dirName=${PWD##*/}
 installPath=$folderPath/$dirName/
 wpBoilerplate=$folderPath/wp-boilerplate/
+themeFolder=$folderPath/$dirName/wp-content/themes/
 url="https://$dirName.app"
 
 # Inform the user that this is assuming they're using Valet-plus
@@ -37,7 +38,11 @@ read siteName
 echo ""
 
 echo -e "Enter a blog description (optional)."
-read $blogDescription
+read blogDescription
+echo ""
+
+echo -e "Enter the theme folder name, ommiting -theme"
+read themeName
 echo ""
 
 # Set the database name
@@ -105,9 +110,11 @@ fi
 # With the database created, we'll need to now import our .sql file
 echo -e "${VP_GREEN}Database created!${VP_WHITE}"
 echo ""
-echo -e "${WP_YELLOW}Now updating URL's and importing the .sql file${VP_NONE}"
+echo -e "${VP_CYAN}Now updating URL's and importing the .sql file${VP_NONE}"
+echo ""
 
 wp db import import.sql
+echo ""
 
 # Check to see if there were any errors importing the database
 # If so, we'll quit the script
@@ -119,6 +126,11 @@ then
     exit 0
 fi
 
+# Change the theme folder name
+echo -e "Now changing the theme folder name from ${VP_CYAN}${VP_BOLD}sage9-project-name-theme${VP_NONE}${VP_WHITE} to ${VP_CYAN}${VP_BOLD}$themeName-theme${VP_NONE}${VP_WHITE}"
+echo ""
+mv $themeFolder/sage9-project-name-theme $themeFolder/$themeName-theme
+
 echo -e "You can choose to create top level pages you know you'll need here, otherwise just hit enter to skip this."
 echo -e "Please separate page names with a comma (,) and no space. The ${VP_CYAN}Homepage${VP_WHITE} is already created."
 echo -e ""
@@ -126,8 +138,7 @@ echo -e "${VP_CYAN}Example:${VP_WHITE} About Us,Contact Us,Blog"
 read pageList
 
 # Do we want to disable comments?
-echo -e "${VP_YELLOW}Disable comments? [y/n]${VP_NONE}${VP_WHITE}" 
-read disableComments
+echo -e "${VP_YELLOW}Disable comments? [y/n]${VP_NONE}${VP_WHITE}"; read disableComments
 
 # Lets remove the default "Hellow World" post
 wp post delete 1 --force
@@ -175,6 +186,9 @@ fi
 wp option update show_on_front 'page'
 wp option update page_on_front 2
 
+# Set the Timezone to Chicago
+wp option update timezone_string "America/Chicago"
+
 # Replace the old http://wp-boilerplate.test:8080 with the sitename
 echo -e "${VP_YELLOW}Replacing ${VP_UNDERLINE}${VP_WHITE}http://wp-boilerplate.test:8080${VP_NONE} ${VP_YELLOW}with ${VP_UNDERLINE}${VP_WHITE}$url${VP_NONE}"
 wp search-replace 'http://wp-boilerplate.test:8080' $url --all-tables --quiet
@@ -188,11 +202,17 @@ wp db optimize --quiet
 echo -e "Updating plugins."
 wp plugin update --all
 
-wp plugin install classic-editor --activate
-wp plugin activate wp-accessibility
+echo -e "${VP_YELLOW}Install Classic Editor? [y/n]${VP_NONE}${VP_WHITE}"
+read classicEditor
+if [ "$classicEditor" = 'y' ]
+then
+    wp plugin install classic-editor --activate
+fi
 
 echo -e "Activate additional default plugins? [y/n]"
-if [ "$disableComments" = 'y' ]
+read additionalPlugins
+
+if [ "$additionalPlugins" = 'y' ]
 then
     echo -e "${VP_YELLOW}Activate Gravity Forms? [y/n]"
     read gravityForms
@@ -221,6 +241,8 @@ then
     fi
 
 fi
+
+wp plugin activate wp-accessibility
 
 # Clean up some root installation files
 echo -e "${VP_RED}Deleting ${VP_BOLD}import.sql${VP_NONE} and the ${VP_BOLD}duplicator.zip${VP_NONE} files.${VP_WHITE}"

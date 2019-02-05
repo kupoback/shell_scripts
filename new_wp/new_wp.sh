@@ -25,8 +25,8 @@ fi
 echo -e "${VP_CYAN}This bash script is under the assumption that you are using valet-plus to set up this WordPress install.${VP_NONE}"
 echo -e "${VP_CYAN}${VP_BOLD}This script will now clear your terminal window.${VP_NONE}"
 echo ""
-echo -e "${VP_WHITE}${VP_BOLD}Please press enter to continue."
-read clearTerminal
+echo -e "${VP_WHITE}${VP_BOLD}Please press enter to continue."; read clearTerminal
+
 clear
 
 # We will now try to cache the sudo password, as we'll be setting up an SSL for their dev environment
@@ -34,19 +34,28 @@ echo -e "${VP_RED}${VP_BOLD}You may be asked twice for your password, but this i
 sudo -v
 
 # Set the Site Name
-echo -e "Enter the site name."
-read siteName
+echo -e "Enter the site name."; read siteName
 echo ""
 
 # Set the database name
 echo -e "Enter your chosen database name."
-echo -e "${VP_WHITE}Note, wp_ is automatically prefixed"
-read dbName
+echo -e "${VP_WHITE}Note, wp_ is automatically prefixed"; read dbName
 echo ""
 
+echo -e "Enter your database user name if it differs from root, otherwise hit enter."; read dbUser
+echo ""
+
+echo -e "Enter your database password if it differs from root, otherwise hit enter."; read dbPassword
+echo ""
+
+# If a $dbUser was not entered, we'll default to valet-plus' mysql username
+[ -z "$dbUser" ] && $dbUser = 'root'
+
+# If a $dbUser was not entered, we'll default to valet-plus' mysql password
+[ -z "$dbPassword" ] && $dbPassword = 'root'
+
 # Let's double check the WordPress version they want to download
-echo -e "${VP_PURPLE}If you'd like to download a different version number, please enter in the number, otherwise, just press enter.${VP_WHITE}"
-read wpVersion
+echo -e "${VP_PURPLE}If you'd like to download a different version number, please enter in the number, otherwise, just press enter.${VP_WHITE}"; read wpVersion
 echo ""
 
 # Start downloading WordPress and it's latest version
@@ -54,7 +63,7 @@ echo ""
 
 ## Create the wp-config file and the database
 echo -e "${VP_PURPLE}Creating database and setting up wp-config.php file.${VP_WHITE}"
-wp config create --dbname=wp_$dbName --dbuser=root --dbpass=root --extra-php <<PHP
+wp config create --dbname=wp_$dbName --dbuser=$dbUser --dbpass=$dbName --extra-php <<PHP
 define( 'WP_DEBUG', true);
 define( 'WP_DEBUG_LOG', true );
 define( 'WP_DEBUG_DISPLAY', false );
@@ -74,7 +83,7 @@ else
     read dbNameReTry
     echo ""
 
-    wp config create --dbname=wp_$dbNameReTry --dbuser=root --dbpass=root --force --extra-php <<PHP
+    wp config create --dbname=wp_$dbNameReTry --dbuser=$dbUser --dbpass=$dbPassword --force --extra-php <<PHP
 define( 'WP_DEBUG', true);
 define( 'WP_DEBUG_LOG', true );
 define( 'WP_DEBUG_DISPLAY', false );
