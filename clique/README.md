@@ -1,7 +1,6 @@
 # Clique Studios Local Backend WP Install
 
 ## Prerequisites:
-___
 * Install `valet` or `valet-plus`
 * If running `valet`, install `wp-cli`
 * `mkdir` a folder in your `/Sites/` folder, or whever you have `valet park` set with a sub-dir for the **`wp-boilerplate` [repository][1]**
@@ -12,7 +11,6 @@ ___
 		* You can run `.app` as your domain, but you WILL need to create an SSL certificate for each folder you have parked, which this script does automatically.
 
 ## Description
-___
 The following below describes what this shell script does.
 
 * Asks for a few prompts for you to fill in : your password (for `valet`), the sitename, blog description *(optional)*, database name, database password,
@@ -53,15 +51,13 @@ If you wanna try it, I suggest creating a `.custom_bash_scripts`dir on `$HOME` a
 
 ### [Download the Bash Script][2]
 
-
 This will be my baby and maintenance will be on going, so PLEASE any issues you encounter OR any improvements you feel I would make, create tickets here: https://github.com/kupoback/shell_scripts/issues
 
 ## @TODO List
-___
 
 * **@TODO**: Allow the addition of sub pages, but will need to rethink the logic on this
 
 
 <!-- Links -->
 [1]:https://bitbucket.org/clique_studios/wp-boilerplate/src/master/
-[2]:https://github.com/kupoback/shell_scripts/blob/master/clique_wp.sh
+[2]:https://github.com/kupoback/shell_scripts/blob/master/clique/clique_wp.sh
