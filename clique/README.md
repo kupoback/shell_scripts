@@ -3,12 +3,14 @@
 ## Prerequisites:
 * Install `valet` or `valet-plus`
 * If running `valet`, install `wp-cli`
-* `mkdir` a folder in your `/Sites/` folder, or whever you have `valet park` set with a sub-dir for the **`wp-boilerplate` [repository][1]**
+* `mkdir` a folder in your `/Sites/` folder, or whever you have `valet park` set with a sub-dir for the <ins>**[`wp-boilerplate` repository]**</ins>
 * Check the following lines
 	* Line 15: For the correct /path/to/Sites_folder
 	* Line 18: That `wp-boilerplate` is the correct folder name where the WP-Boilerplate repository lives
 	* Line 19: The .TLD is the correct setup for your env. To check, run `valet domain` and see what it states.
 		* You can run `.app` as your domain, but you WILL need to create an SSL certificate for each folder you have parked, which this script does automatically.
+
+***
 
 ## Description
 The following below describes what this shell script does.
@@ -28,7 +30,7 @@ The following below describes what this shell script does.
 * Sets the `show_front_page` to `page`
 * Sets the `page_on_front` to `Home` by ID 2
 * Runs a database search/replace to replace `http://wp-boilerplate.test:8080` with `https://you_folder_name.tls`
-  * Example: `https://wordpress_core.app`
+  * **Example**: `https://wordpress_core.app`
 * Flushes the rewrite permalinks
 * Updates all the plugins
 * Installs and activates classic-editor
@@ -48,7 +50,7 @@ Unfortunately since the repo file is `zip` and not `tar.gz` it take a little lon
 
 This is my first complex automate as much as possible script, and when starting `SAWS` I was able to get everything setup in under 2 minutes.
 
-### [Download the Bash Script][2]
+### <ins>**[Download the Bash Script]**</ins>
 
 If you wanna try it, I suggest creating a `.custom_bash_scripts` dir on `$HOME` or `$USER$` and adding that folder to your path.
 
@@ -58,12 +60,14 @@ Running the command in terminal `chmod 755 clique_wp.sh` followed by `source ~/.
 
 This will be my baby and maintenance will be on going, so PLEASE any issues you encounter OR any improvements you feel I would make, create tickets [here][3].
 
+***
+
 ## @TODO List
 
 * **@TODO**: Allow the addition of sub pages, but will need to rethink the logic on this
 
 
 <!-- Links -->
-[1]:https://bitbucket.org/clique_studios/wp-boilerplate/src/master/
-[2]:https://github.com/kupoback/shell_scripts/blob/master/clique/clique_wp.sh
+[`wp-boilerplate` repository]:https://bitbucket.org/clique_studios/wp-boilerplate/src/master/
+[Download the Bash Script]:https://github.com/kupoback/shell_scripts/blob/master/clique/clique_wp.sh
 [3]:https://github.com/kupoback/shell_scripts/issues
