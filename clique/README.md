@@ -43,7 +43,7 @@ The following below describes what this shell script does.
   * I find it best to run local sites via SSL to mimic the live site to it’s truest form
 * The final thing on screen will showcase the domain you can command click on to access the front-end, a link to access the back end, the login creds based on the repo, and a link to Duplicators cleanup files.
 
-## Postfase
+## Postface
 Unfortunately since the repo file is `zip` and not `tar.gz` it take a little longer.
 
 This is my first complex automate as much as possible script, and when starting `SAWS` I was able to get everything setup in under 2 minutes.
