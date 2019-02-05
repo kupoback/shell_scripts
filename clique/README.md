@@ -43,15 +43,20 @@ The following below describes what this shell script does.
   * I find it best to run local sites via SSL to mimic the live site to it’s truest form
 * The final thing on screen will showcase the domain you can command click on to access the front-end, a link to access the back end, the login creds based on the repo, and a link to Duplicators cleanup files.
 
+## Postfase
 Unfortunately since the repo file is `zip` and not `tar.gz` it take a little longer.
 
 This is my first complex automate as much as possible script, and when starting `SAWS` I was able to get everything setup in under 2 minutes.
 
-If you wanna try it, I suggest creating a `.custom_bash_scripts`dir on `$HOME` and adding that folder to your path. Then running `chmod 755 clique_wp.sh` followed by `source ~/.bash_profile` or `source ~/.bashrc` where ever you’re storing your `PATH` declarations.
-
 ### [Download the Bash Script][2]
 
-This will be my baby and maintenance will be on going, so PLEASE any issues you encounter OR any improvements you feel I would make, create tickets here: https://github.com/kupoback/shell_scripts/issues
+If you wanna try it, I suggest creating a `.custom_bash_scripts` dir on `$HOME` or `$USER$` and adding that folder to your path.
+
+* Example: `export PATH="$PATH:$HOME/.custom_bash_scripts:$PATH"`
+
+Running the command in terminal `chmod 755 clique_wp.sh` followed by `source ~/.bash_profile` or `source ~/.bashrc` where ever you’re storing your `PATH` declarations, will allow you to then call to the shell script in terminal wherever.
+
+This will be my baby and maintenance will be on going, so PLEASE any issues you encounter OR any improvements you feel I would make, create tickets [here][3].
 
 ## @TODO List
 
@@ -61,3 +66,4 @@ This will be my baby and maintenance will be on going, so PLEASE any issues you 
 <!-- Links -->
 [1]:https://bitbucket.org/clique_studios/wp-boilerplate/src/master/
 [2]:https://github.com/kupoback/shell_scripts/blob/master/clique/clique_wp.sh
+[3]:https://github.com/kupoback/shell_scripts/issues
