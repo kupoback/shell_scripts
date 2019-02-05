@@ -10,8 +10,6 @@
 	* Line 19: The .TLD is the correct setup for your env. To check, run `valet domain` and see what it states.
 		* You can run `.app` as your domain, but you WILL need to create an SSL certificate for each folder you have parked, which this script does automatically.
 
-***
-
 ## Description
 The following below describes what this shell script does.
 
@@ -60,7 +58,6 @@ Running the command in terminal `chmod 755 clique_wp.sh` followed by `source ~/.
 
 This will be my baby and maintenance will be on going, so PLEASE any issues you encounter OR any improvements you feel I would make, create tickets [here][3].
 
-***
 
 ## @TODO List
 
