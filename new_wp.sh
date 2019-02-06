@@ -119,7 +119,7 @@ read -r adminEmail
 if wp core install --url="${dirName}.app" --title="${siteName}.app" --admin_user="${adminUser}" --admin_password="${adminPassword}" --admin_email="${adminEmail}"
 then
     echo -e "${VP_RED}You have some errors. Please check your errors.${VP_WHITE}"
-    
+
     # Set the admin
     echo -e "Please enter in a username."
     read -r adminUser
