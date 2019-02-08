@@ -116,7 +116,7 @@ echo -e "\\nPlease enter in the admin email."
 read -r adminEmail
 
 # Beginning of site build
-if wp core install --url="${dirName}.app" --title="${siteName}.app" --admin_user="${adminUser}" --admin_password="${adminPassword}" --admin_email="${adminEmail}"
+if ! wp core install --url="${dirName}.app" --title="${siteName}.app" --admin_user="${adminUser}" --admin_password="${adminPassword}" --admin_email="${adminEmail}"
 then
     echo -e "${VP_RED}You have some errors. Please check your errors.${VP_WHITE}"
 
