@@ -64,7 +64,7 @@ confirm () {
 }
 
 # PRE-FLIGHT CHECKS
-if [[ ! -d ./.git ]] ; then errsay "No cloned repository found" ; exit 1 ; fi
+if [[ ! -d ./.git ]] ; then errsay "No cloned repository found" ; nl ; exit 1 ; fi
 # FIXME: there should be a pre-flight check to verify that the wp cli is available
 # FIXME: there should be a pre-flight check to verify that valet-plus is installed
 
@@ -126,11 +126,11 @@ download_wordpress () {
     say "Downloading WordPress ..."
     if [[ "${wpVersion}" == "latest" ]] ; then
         if ! wp core download ; then
-            errsay "Error during WordPress download" ; exit 1
+            errsay "Error during WordPress download" ; nl ; exit 1
         fi
     else
         if ! wp core download --version="${wpVersion}" ; then
-            errsay "Error during WordPress download" ; exit 1
+            errsay "Error during WordPress download" ; nl ; exit 1
         fi
     fi
 
@@ -145,7 +145,7 @@ define('WP_DEBUG', true);
 define('WP_DEBUG_LOG', true);
 define('WP_DEBUG_DISPLAY', false);
 PHP
-    then errsay "Error during creation of wp-config.php" ; exit 1 ; fi
+    then errsay "Error during creation of wp-config.php" ; exit 1 ; nl ; fi
 
 }
 
@@ -153,7 +153,7 @@ create_wp_database () {
 
     say "Creating WordPress database ..."
     if ! wp db create ; then
-        errsay "Error during database creation" ; exit 1
+        errsay "Error during database creation" ; nl ; exit 1
     fi
 
 }
@@ -162,7 +162,7 @@ build_wp_site () {
 
     say "Building WordPress site ..."
     if ! wp core install --url="${dirName}.app" --title="${siteName}.app" --admin_user="${adminUserName}" --admin_password="${adminUserPass}" --admin_email="${adminUserEmail}" ; then
-        errsay "Error during building of site" ; exit 1
+        errsay "Error during building of site" ; nl ; exit 1
     fi
 
 }
@@ -171,7 +171,7 @@ enable_tls_for_env () {
 
     say "Enabling TLS for site ..."
     if ! valet secure "${dirName}" ; then
-        errsay "Error while securing site"
+        errsay "Error while securing site" ; nl ; exit 1
     fi
 
 }
@@ -185,4 +185,4 @@ create_wp_config
 create_wp_database
 build_wp_site
 enable_tls_for_env
-say "Environment sucessfully setup. You may access your new site at https://${dirName}.app"
+say "Environment sucessfully setup. You may access your new site at ${ink_yellow}https://${dirName}.app" ; nl
