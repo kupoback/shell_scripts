@@ -51,9 +51,9 @@ fi
 yes_no="${ink_blue}[${ink_clear} ${ink_green}yes${ink_clear} ${ink_blue}/${ink_clear} ${ink_red}no${ink_clear} ${ink_blue}]${ink_clear}"
 mysql_maria="${ink_blue}[${ink_clear} ${ink_yellow}mysql${ink_clear} ${ink_blue}/${ink_clear} ${ink_purple}mariadb${ink_clear} ${ink_blue}]${ink_clear}"
 latest="${ink_yellow}latest version"
-yuicompressor=''
-path=$HOME
-sitepath="$HOME/Sites"
+yuicompressor=""
+path="${HOME}"
+sitepath="${HOME}/Sites"
 phpmyadmin=https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-english.tar.gz
 nl() { if [[ -z "${quiet}" ]]; then echo; fi; }
 say() { if [[ -z "${quiet}" ]]; then echo -e "\\n${ink_grey}${1}${ink_clear}"; fi; }
@@ -227,36 +227,38 @@ brew_error_checks() {
 
 # Writes exports to ./bash_profile
 bash_profile_write() {
-    if [[ ! -e $HOME/.bash_profile ]]; then
-        tinysay "Creating a .bash_profile file at $HOME"
+    if [[ ! -e ${HOME}/.bash_profile ]]; then
+        tinysay "Creating a .bash_profile file at ${HOME}"
     fi
 
-    if ! grep -q "export PATH" $HOME/.bash_profile; then
+    if ! grep -q "export PATH" ${HOME}/.bash_profile; then
         tinysay "Adding export PATH to ~/.bash_profile"
-        echo 'export PATH' >> $HOME/.bash_profile
+        echo 'export PATH' >> ${HOME}/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="$PATH:$HOME/npm/bin"' $HOME/.bash_profile; then
+    if ! grep -q 'export PATH="$PATH:${HOME}/npm/bin"' ${HOME}/.bash_profile; then
         tinysay "Adding NPM to your \$PATH"
-        echo 'export PATH="$PATH:$HOME/npm/bin"' >> $HOME/.bash_profile
+        echo 'export PATH="$PATH:${HOME}/npm/bin"' >> ${HOME}/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="/usr/local/bin:$PATH"' $HOME/.bash_profile; then
+    if ! grep -q 'export PATH="/usr/local/bin:$PATH"' ${HOME}/.bash_profile; then
         tinysay "Adding bin to your \$Path"
-        echo 'export PATH="/usr/local/bin:$PATH"' >> $HOME/.bash_profile
+        echo 'export PATH="/usr/local/bin:$PATH"' >> ${HOME}/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="/usr/local/sbin:$PATH"' $HOME/.bash_profile; then
+    if ! grep -q 'export PATH="/usr/local/sbin:$PATH"' ${HOME}/.bash_profile; then
         tinysay "Adding sbin to your \$Path"
-        echo 'export PATH="/usr/local/sbin:$PATH"' >> $HOME/.bash_profile
+        echo 'export PATH="/usr/local/sbin:$PATH"' >> ${HOME}/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="$PATH:$HOME/.composer/vendor/bin"' $HOME/.bash_profile; then
+    if ! grep -q 'export PATH="$PATH:${HOME}/.composer/vendor/bin"' ${HOME}/.bash_profile; then
         tinysay "Adding Composer to ~/.bash_profile"
-        echo 'export PATH="$PATH:$HOME/.composer/vendor/bin"' >> $HOME/.bash_profile
+        echo 'export PATH="$PATH:${HOME}/.composer/vendor/bin"' >> ${HOME}/.bash_profile
     fi
 
-    source $HOME/.bash_profile
+    
+
+    source ${HOME}/.bash_profile
     tinysay "Reloaded your ${ink_yellow}.bash_proflie${ink_grey}"
 
 }
@@ -297,16 +299,16 @@ install_wpcli() {
     fi
 
     if type wp >/dev/null 2>&1; then
-        cd $HOME
+        cd ${HOME}
         mkdir .bash_completions
         cd .bash_completions
-        if [[ -e $HOME/.bash_completions/wp-completion.bash ]]; then 
+        if [[ -e ${HOME}/.bash_completions/wp-completion.bash ]]; then 
             curl -O https://raw.githubusercontent.com/wp-cli/wp-cli/v1.5.1/utils/wp-completion.bash
-            echo "source \$HOME/.bash_completions/wp-completion.bash" >> $HOME/.bash_profile
+            echo "source \${HOME}/.bash_completions/wp-completion.bash" >> ${HOME}/.bash_profile
         fi
     fi
 
-    source $HOME/.bash_profile
+    source ${HOME}/.bash_profile
 
 }
 
