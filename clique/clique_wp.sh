@@ -205,7 +205,7 @@ wp post update 2 --post_title=Home --post_name=home --post_type=page --post_stat
 if [[ -n "${pageList}" ]]
 then
     echo -e "\\n${VP_CYAN}Creating pages.${VP_WHITE}${VP_NONE}"
-    IFS=","
+    IFS=", "
     arr=("${pageList}")
     for i in "${!arr[@]}"
     do
