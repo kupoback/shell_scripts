@@ -46,7 +46,6 @@ fi
 yes_no="${ink_blue}[${ink_clear} ${ink_green}yes${ink_clear} ${ink_blue}/${ink_clear} ${ink_red}no${ink_clear} ${ink_blue}]${ink_clear}"
 nl      () { if [[ -z "${quiet}" ]] ; then echo ; fi ; }
 say     () { if [[ -z "${quiet}" ]] ; then echo -e "\\n${ink_gray}${1}${ink_clear}" ; fi ; }
-success () { if [[ -z "${quiet}" ]] ; then echo -e "\\n${ink_green}${1}${ink_clear}" ; fi ; }
 tinysay () { if [[ -z "${quiet}" ]] ; then echo -e "${ink_gray}${1}${ink_clear}" ; fi ; }
 errsay  () { echo -e "\\n${ink_red}${1}. Script aborted!${ink_clear}" ; }
 err     () { echo -e "\\n${ink_red}${1}${ink_clear}" ; }
@@ -83,10 +82,10 @@ initiate_env_setup () {
         say "Exiting script\\n" && exit 0
     fi
 
-    say "This script is under the assumption that you're using ${ink_blue}valet${ink_gray} or ${ink_blue}valet-plus${ink_gray} to setup this WordPress environment."
+    say "This script is under the assumption that you're using ${ink_blue}valet-plus${ink_gray} to setup this WordPress environment."
     confirm "Would you like to continue? ${yes_no}"
     clear
-    say "Starting new WordPress environment setup ..."
+    tinysay "Starting new WordPress environment setup ..."
     
 }
 
@@ -102,18 +101,16 @@ collect_environment_information () {
     say "Please provide the necessary information for the new environment:"
     nl
     askinfo "Site name:" siteName
-    askinfo "Enter your TLS (omit the period [.] ): " domainTLS
+    askinfo "Enter your TLS: " domainTLS
     askinfo "Install SSL (default: yes): ${yes_no}" addSSL
     askinfo "WordPress version (default: latest):" wpVersion
-    askinfo "MySQL Localhost or IP (default: localhost):" dbHost
-    askinfo "Database Name (include prefix if desired):" dbName
-    askinfo "Database Table Prefix (default: wp_):" dbTablePrefix
-    askinfo "Database User Name (default: root):" dbUserName
-    askinfo "Database User Password:" dbUserPass
-    askinfo "WP Admin User Name:" adminUserName
-    askinfo "WP Admin User Password:" adminUserPass
-    askinfo "WP Admin Email:" adminUserEmail
-    askinfo "Install Blank Site; This will still install ${ink_yellow}Twentynineteen${ink_gray} theme (default: no): ${yes_no}" blankInstall
+    askinfo "Database name (wp_ will be prefixed):" dbName
+    askinfo "Database user name (default: root):" dbUserName
+    askinfo "Database user pass (default: root):" dbUserPass
+    askinfo "Admin user name:" adminUserName
+    askinfo "Admin user pass:" adminUserPass
+    askinfo "Admin user email:" adminUserEmail
+    askinfo "Install Blank Site (default: no): ${yes_no}" blankInstall
     askinfo "Disable Comments (default: no): ${yes_no}" disableComments
     askinfo "Disable Trackbacks (default: no): ${yes_no}" disableTrackbacks
     askinfo "Create additional pages? ${yes_no}" createPages
@@ -124,15 +121,9 @@ collect_environment_information () {
     # setting defaults if values were omitted
     if [[ -z "${domainTLS}" ]] ; then tinysay "You must enter a TLS. Exiting script\\n" && exit 0 ; fi
     if [[ -z "${addSSL}" ]] ; then addSSL="yes" ; fi
-    if [[ -z "${dbHost}" ]] ; then dbHost="localhost" ; fi
-    if [[ -z "${dbName}" ]] ; then
-        err "\\nYou didn't enter in a database name."
-        askinfo "Database Name (include prefix if desired):" dbName 
-    fi
-    if [[ -z "${dbTablePrefix}" ]] ; then dbTablePrefix="wp_" ; fi
-    if [[ -z "${dbUserName}" ]] ; then dbUserName="root" ; fi
-    if [[ -z "${dbUserPass}" ]] ; then dbUserPass="" ; fi
     if [[ -z "${wpVersion}" ]] ; then wpVersion="latest" ; fi
+    if [[ -z "${dbUserName}" ]] ; then dbUserName="root" ; fi
+    if [[ -z "${dbUserPass}" ]] ; then dbUserPass="root" ; fi
     if [[ -z "${disableComments}" ]] ; then disableComments="no" ; fi
     if [[ -z "${disableTrackbacks}" ]] ; then disableTrackbacks="no" ; fi
     if [[ -z "${blankInstall}" ]] ; then blankInstall="no" ; fi
@@ -140,30 +131,21 @@ collect_environment_information () {
     
     say "The ${ink_yellow}new environment${ink_gray} will be created with the following information:"
     nl
-    tinysay "Site name:                 ${ink_yellow}${siteName}"
+    tinysay "Site name:          ${ink_yellow}${siteName}"
     if [[ "${addSSL}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then
-        tinysay "URL:                       ${ink_yellow}${sslURL}"
+        tinysay "URL:                ${ink_yellow}${sslURL}"
     else
-        tinysay "URL:                       ${ink_yellow}${nonSSLURL}"
+        tinysay "URL:                ${ink_yellow}${nonSSLURL}"
     fi
-    tinysay "WordPress version:         ${ink_yellow}${wpVersion}"
-    tinysay "Database Host:             ${ink_yellow}${dbHost}"
-    tinysay "Database Name:             ${ink_yellow}${dbName}"
-    tinysay "Database Table Prefix:     ${ink_yellow}${dbTablePrefix}"
-    tinysay "Database User Name:        ${ink_yellow}${dbUserName}"
-    if [[ -z "${dbUserPass}" ]] ; then
-        tinysay "Database User Password:    ${ink_yellow}No Password"
-    else
-        tinysay "Database User Password:    ${ink_yellow}${dbUserPass}"
-    fi
-    tinysay "WP Admin User Name:        ${ink_yellow}${adminUserName}"
-    tinysay "WP Admin User Password:    ${ink_yellow}${adminUserPass}"
-    tinysay "WP Admin User Email:       ${ink_yellow}${adminUserEmail}"
-    if [[ "${blankInstall}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then 
-        tinysay "Default Contents:          ${ink_yellow}TwentyNineteen Theme Only" 
-    fi
-    if [[ "${createPages}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then 
-        tinysay "Creating pages:            ${ink_yellow}${pageList}" 
+    tinysay "WordPress version:  ${ink_yellow}${wpVersion}"
+    tinysay "Database name:      ${ink_yellow}wp_${dbName}"
+    tinysay "Database user name: ${ink_yellow}${dbUserName}"
+    tinysay "Database user pass: ${ink_yellow}${dbUserPass}"
+    tinysay "Admin user name:    ${ink_yellow}${adminUserName}"
+    tinysay "Admin user pass:    ${ink_yellow}${adminUserPass}"
+    tinysay "Admin user email:   ${ink_yellow}${adminUserEmail}"
+    if [[ "${createPages}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then
+        tinysay "Creating pages:     ${ink_yellow}${pageList}"
     fi
     
     confirm "Would you like to continue? ${yes_no}"
@@ -201,7 +183,7 @@ create_wp_config () {
     
     say "Creating WordPress configuration file (wp-config.php) ..."
     rm -rf wp-config.php
-    if ! wp config create --dbhost=${dbHost} --dbname="${dbName}" --dbuser="${dbUserName}" --dbpass="${dbUserPass}" --dbprefix="${dbTablePrefix}"
+    if ! wp config create --dbname=wp_"${dbName}" --dbuser="${dbUserName}" --dbpass="${dbUserPass}"
     then errsay "Error during creation of wp-config.php" ; exit 1 ; fi
     
 }
@@ -218,32 +200,28 @@ create_wp_database () {
 build_wp_site () {
     
     say "Building WordPress site ..."
-    if ! wp core install --url="${dirName}.${domainTLS}" --title="${siteName}" --admin_user="${adminUserName}" --admin_password="${adminUserPass}" --admin_email="${adminUserEmail}" ; then
+    if ! wp core install --url="${dirName}.app" --title="${siteName}" --admin_user="${adminUserName}" --admin_password="${adminUserPass}" --admin_email="${adminUserEmail}" ; then
         errsay "Error during building of site" ; exit 1
     fi
 
-    if [[ "${blankInstall}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then 
-        add_missing_folders
-        
-    fi
-
-    say "Changing ${ink_yellow}\"Sampe Page\"${ink_gray} to ${ink_yellow}\"Home\"${ink_gray}"
+    tinysay "Changing ${ink_yellow}\"Sampe Page\"${ink_gray} to ${ink_yellow}\"Home\"${ink_gray}"
     wp post update 2 --post_title=Home --post_name=home --post_type=page --post_status=publish --post_content= --post_excerpt=
 
-    say "Setting \"Home\" as the Front Page"
+    tinysay "Setting \"Home\" as the Front Page"
     wp option update show_on_front 'page'
     wp option update page_on_front 2
 
-    say "Changing timezone to Chicago"
+    tinysay "Changing timezone to Chicago"
     wp option update timezone_string "America/Chicago"
 
     if [[ "${disableComments}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then disable_comments ; fi
     if [[ "${disableTrackbacks}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then disable_tackbacks ; fi
     if [[ "${createPages}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then loop_create_pages ; fi
     
-    say "Flushing permalinks"
-    wp rewrite structure /%postname%/
+    tinysay "Flushing permalinks"
     wp cache flush
+    wp rewrite structure /%postname%/
+    wp rewrite flush
 
 }
 
@@ -277,16 +255,6 @@ setup_complete() {
 }
 
 # Conditional Functions
-add_missing_folders() {
-    if [[ "${blankInstall}" =~ ^([yY][eE][sS]|[yY])+ ]] ; then
-        mkdir wp-content/themes wp-content/plugins
-        say "Installing TwentyNinteent Theme to confirm site is setup."
-        if ! wp theme install twentynineteen --activate ; then
-            errsay "Error installing Twentynineteen theme. Contact script creator to correct the issue"  && exit 0;
-        fi
-    fi
-}
-
 create_pages() {
     say "You can choose to create top level pages you know you'll need here, otherwise just hit enter to skip this."
     say "Please separate page names with a semicolon (;) with no space after it. The ${VP_CYAN}Homepage${VP_WHITE} is already created."
@@ -299,25 +267,25 @@ loop_create_pages() {
 
     if [[ -n "${pageList}" || "${pageList}" != *"," ]] ;
     then
-        say "Creating pages…"
+        tinysay "Creating pages…"
         IFS=";" 
         for i in ${pageList}
         do
             wp post create --post_title="${i}" --post_type=page --post_status="publish"
         done
         unset IFS
-        success "Pages created."
+        tinysay "Pages created."
     fi
 }
 
 disable_comments() {
-    say "Disabling Comments…"
+    tinysay "Disabling Comments…"
     wp post list --format=ids | xargs wp post update --comment_status=closed
     wp option update default_comment_status "closed"
 }
 
 disable_tackbacks() {
-    say "Disabling Trackbacks…"
+    tinysay "Disabling Trackbacks…"
     wp post list --format=ids | xargs wp post update --ping_status=closed
     wp option update default_ping_status "closed"
     wp option update default_pingback_flag 0
