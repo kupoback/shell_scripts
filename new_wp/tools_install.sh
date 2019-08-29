@@ -62,10 +62,12 @@ errsay() { echo -e "\\n${ink_red}${1}. Script aborted!${ink_clear}"; }
 sucsay() { echo -e "${ink_green}${1} successfully installed.${ink_clear}"; }
 err() { echo -e "\\n${ink_red}${1}${ink_clear}"; }
 ask() { echo -en "\\n${ink_grey}${1} ${ink_clear}"; }
+# Asks for info
 askinfo() {
     echo -en "${ink_grey}${1} ${ink_clear}"
     read -r "${2}"
 }
+# Get site path
 saysitepath() {
     echo -en "${ink_grey}${1}: ${ink_clear}"
     echo -en "${ink_blue}${path} ${ink_clear}"
