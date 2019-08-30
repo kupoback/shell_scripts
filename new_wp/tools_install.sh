@@ -10,25 +10,18 @@ OPTIONS:\\n
 "; }
 
 # OPTIONS
-while getopts "mqh" opt; do
+while getopts "mqh" opt ; do
     case "${opt}" in
-    m) monochrome="yes" ;;
-    q) quiet="yes" ;;
-    h)
-        usage
-        exit 0
-        ;;
-    *)
-        usage
-        exit 1
-        ;;
+        m) monochrome="yes" ;;
+        q) quiet="yes" ;;
+        h) usage ; exit 0 ;;
+        *) usage ; exit 1 ;;
     esac
 done
 
 # COMMON VARIABLES & FUNCTIONS
 # colors
-if [[ -n "${monochrome}" ]]; then
-    ink_brew="\\xF0\x9f\x8d\xba"
+if [[ -n "${monochrome}" ]] ; then
     ink_clear="\\x1b[0m"
     ink_grey="\\x1b[38;5;244m"
     ink_red="\\x1b[0m"
@@ -37,7 +30,6 @@ if [[ -n "${monochrome}" ]]; then
     ink_yellow="\\x1b[0m"
     ink_purple="\\x1b[0m"
 else
-    ink_brew="\\xF0\x9f\x8d\xba"
     ink_clear="\\x1b[0m"
     ink_grey="\\x1b[38;5;244m"
     ink_red="\\x1b[38;5;204m"
@@ -55,23 +47,16 @@ yuicompressor=""
 path="${HOME}"
 sitepath="${HOME}/Sites"
 phpmyadmin=https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-english.tar.gz
-nl() { if [[ -z "${quiet}" ]]; then echo; fi; }
-say() { if [[ -z "${quiet}" ]]; then echo -e "\\n${ink_grey}${1}${ink_clear}"; fi; }
-tinysay() { if [[ -z "${quiet}" ]]; then echo -e "${ink_grey}${1}${ink_clear}"; fi; }
-errsay() { echo -e "\\n${ink_red}${1}. Script aborted!${ink_clear}"; }
-sucsay() { echo -e "${ink_green}${1} successfully installed.${ink_clear}"; }
-err() { echo -e "\\n${ink_red}${1}${ink_clear}"; }
-ask() { echo -en "\\n${ink_grey}${1} ${ink_clear}"; }
-# Asks for info
-askinfo() {
-    echo -en "${ink_grey}${1} ${ink_clear}"
-    read -r "${2}"
-}
-# Get site path
-saysitepath() {
-    echo -en "${ink_grey}${1}: ${ink_clear}"
-    echo -en "${ink_blue}${path} ${ink_clear}"
-}
+nl          () { if [[ -z "${quiet}" ]]; then echo; fi; }
+say         () { if [[ -z "${quiet}" ]]; then echo -e "\\n${ink_grey}${1}${ink_clear}"; fi; }
+success     () { if [[ -z "${quiet}" ]] ; then echo -e "\\n${ink_green}${1}${ink_clear}" ; fi ; }
+tinysay     () { if [[ -z "${quiet}" ]] ; then echo -e "${ink_grey}${1}${ink_clear}" ; fi ; }
+errsay      () { echo -e "\\n${ink_red}${1}. Script aborted!${ink_clear}"; }
+sucsay      () { echo -e "${ink_green}${1} successfully installed.${ink_clear}"; }
+err         () { echo -e "\\n${ink_red}${1}${ink_clear}"; }
+ask         () { echo -en "\\n${ink_grey}${1} ${ink_clear}"; }
+askinfo     () { echo -en "${ink_grey}${1} ${ink_clear}" ; read -r "${2}" ; }
+saysitepath () { echo -en "${ink_grey}${1}: ${ink_clear}\\n${ink_blue}${path} ${ink_clear}" ; }
 
 # confirm
 confirm() {
@@ -102,12 +87,12 @@ collect_install_parameters() {
     confirm "Would you like to continue? ${yes_no}"
     clear
 
-    askinfo "Would you like to use MySQL or mariaDB? ${mysql_maria}" dbStructure
+    askinfo "Would you like to use MySQL or mariaDB? mariaDB runs SQL statements quicker and uses less resources compared to MySQL, though may eventually become uncompatible with MySQL: ${mysql_maria}" dbStructure
     askinfo "${dbStructure} username (default: root):" dbUserName
     askinfo "${dbStructure} password (default: root):" dbUserPass
     nl
-    tinysay "What TLS would you like your sites to be served under? Default is ${ink_yellow}test${ink_grey}"
-    askinfo "${ink_red}Note${ink_grey}: Using ${ink_blue}app${ink_grey} or ${ink_blue}dev${ink_grey} will require you to run ${ink_purple}valet secure folder_name${ink_grey} before visiting the page:" getTLS
+    tinysay "What TLS would you like your sites to be served under? Default is ${ink_blue}test${ink_grey}"
+    askinfo "${ink_red}Note${ink_grey}: Using ${ink_blue}app${ink_grey} or ${ink_blue}dev${ink_grey} will require you to run ${ink_yellow}valet secure {folder_name}${ink_grey} before visiting the page:" getTLS
     askinfo "Install phpmyadmin? ${yes_no}: " installPhpMyAdmin
     askinfo "If using phpStorm, would you like to install yuicompressor for JavaScript and CSS minification watcher? ${yes_no}" getYUI
 
@@ -129,13 +114,13 @@ collect_install_parameters() {
 
     say "${ink_green}ENVIRONMENT"
     tinysay "${ink_blue}Laravel Valet${ink_grey} - Local Dev Environment."
-    tinysay "${ink_blue}php${ink_grey}"
+    tinysay "${ink_blue}php${ink_grey}:                         ${ink_yellow}Latest Version of 7"
     tinysay "${ink_blue}Database${ink_grey}:                    ${ink_yellow}${dbStructure}"
     tinysay "${ink_blue}Database username${ink_grey}:           ${ink_yellow}${dbUserName}"
     tinysay "${ink_blue}Database password${ink_grey}:           ${ink_yellow}${dbUserPass}"
 
     if [[ "${installPhpMyAdmin}" != n* ]]; then
-        tinysay "${ink_blue}phpMyAdmin${ink_grey} - latest version"
+        tinysay "${ink_blue}phpMyAdmin${ink_grey}:              ${latest}"
     fi
     tinysay "${ink_blue}Local site TLS${ink_grey}:              ${ink_yellow}${getTLS}"
     nl
@@ -147,6 +132,7 @@ collect_install_parameters() {
     if [[ "${getYUI}" != n* ]]; then
         tinysay "${ink_blue}YUICompressor${ink_grey}:               ${latest}"
     fi
+    nl
 
     confirm "Would you like to continue? ${yes_no}"
 }
@@ -171,8 +157,8 @@ install_homebrew_packages() {
             yuicompressor="yuicompressor"
         fi
         
-        tinysay "Installing ${ink_brew} brew packages. Please wait…"
-        # brew install composer node php wget sass/sass/sass ${dbStructure} ${yuicompressor}
+        tinysay "Installing ${ink_yellow} brew packages${ink_grey}. Please wait…"
+        brew install composer node php wget sass/sass/sass ${dbStructure} ${yuicompressor}
         brew services start ${dbStructure}
         tinysay "${ink_green}Install Complete!${ink_grey}"
     fi
@@ -180,7 +166,7 @@ install_homebrew_packages() {
 
 # Check for any errors when installing brew packages
 brew_error_checks() {
-    tinysay "Checking ${ink_brew} brew for errors."
+    tinysay "Checking ${ink_blue}brew${ink_grey} for errors."
     
     if ! type composer >/dev/null 2>&1; then
         errsay "There was an error installing Composer. Please review why and report back to the script creator."
@@ -229,38 +215,46 @@ brew_error_checks() {
 
 # Writes exports to ./bash_profile
 bash_profile_write() {
-    if [[ ! -e ${HOME}/.bash_profile ]]; then
+    if [[ ! -e "${HOME}"/.bash_profile ]]; then
         tinysay "Creating a .bash_profile file at ${HOME}"
     fi
 
-    if ! grep -q "export PATH" ${HOME}/.bash_profile; then
+    if ! grep -q "export PATH" "${HOME}"/.bash_profile; then
         tinysay "Adding export PATH to ~/.bash_profile"
-        echo 'export PATH' >> ${HOME}/.bash_profile
+        echo "export PATH" >> "${HOME}"/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="$PATH:${HOME}/npm/bin"' ${HOME}/.bash_profile; then
+    if ! grep -q "export PATH=\"$PATH:${HOME}/npm/bin\"" "${HOME}"/.bash_profile; then
         tinysay "Adding NPM to your \$PATH"
-        echo 'export PATH="$PATH:${HOME}/npm/bin"' >> ${HOME}/.bash_profile
+        echo "export PATH=\"$PATH:${HOME}/npm/bin\"" >> "${HOME}"/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="/usr/local/bin:$PATH"' ${HOME}/.bash_profile; then
+    if ! grep -q "export PATH=\"/usr/local/bin:$PATH\"" "${HOME}"/.bash_profile; then
         tinysay "Adding bin to your \$Path"
-        echo 'export PATH="/usr/local/bin:$PATH"' >> ${HOME}/.bash_profile
+        echo "export PATH=\"/usr/local/bin:$PATH\"" >> "${HOME}"/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="/usr/local/sbin:$PATH"' ${HOME}/.bash_profile; then
+    if ! grep -q "export PATH=\"/usr/local/sbin:$PATH\"" "${HOME}"/.bash_profile; then
         tinysay "Adding sbin to your \$Path"
-        echo 'export PATH="/usr/local/sbin:$PATH"' >> ${HOME}/.bash_profile
+        echo "export PATH=\"/usr/local/sbin:$PATH\"" >> "${HOME}"/.bash_profile
     fi
 
-    if ! grep -q 'export PATH="$PATH:${HOME}/.composer/vendor/bin"' ${HOME}/.bash_profile; then
+    if ! grep -q "export PATH=\"$PATH:${HOME}/.composer/vendor/bin\"" "${HOME}"/.bash_profile; then
         tinysay "Adding Composer to ~/.bash_profile"
-        echo 'export PATH="$PATH:${HOME}/.composer/vendor/bin"' >> ${HOME}/.bash_profile
+        echo "export PATH=\"$PATH:${HOME}/.composer/vendor/bin\"" >> "${HOME}"/.bash_profile
     fi
 
-    
+    # Make an SSH Alias file
+    mkdir "${HOME}"/.custom_bash_files
+    cd "${HOME}"/.custom_bash_files || exit
+    cat > .alias_ssh.sh
+    echo "# This file can be used to set aliases for utiliing ssh for servers" > .alias_ssh.sh
+    echo "# Example: alias sitessh=\"ssh root@test.sandbox6.cliquedomains.com\" would create a quick tab completeion to ssh into the Sandbox 6 Digital Ocean Server."  >> .alias_ssh.sh
+    nl
+    cat > .alias_commands.sh
+    echo "# This file can be used to set up various alias' needed to make development easier." > .alias_commands.sh
 
-    source ${HOME}/.bash_profile
+    source "${HOME}"/.bash_profile
     tinysay "Reloaded your ${ink_yellow}.bash_proflie${ink_grey}"
 
 }
@@ -301,16 +295,21 @@ install_wpcli() {
     fi
 
     if type wp >/dev/null 2>&1; then
-        cd ${HOME}
+        cd "${HOME}" || exit
         mkdir .bash_completions
-        cd .bash_completions
-        if [[ -e ${HOME}/.bash_completions/wp-completion.bash ]]; then 
+        cd .bash_completions || exit
+        if [[ -e "${HOME}"/.bash_completions/wp-completion.bash ]]; then 
             curl -O https://raw.githubusercontent.com/wp-cli/wp-cli/v1.5.1/utils/wp-completion.bash
-            echo "source \${HOME}/.bash_completions/wp-completion.bash" >> ${HOME}/.bash_profile
+            echo "source \"${HOME}\"/.bash_completions/wp-completion.bash" >> "${HOME}"/.bash_profile
         fi
     fi
 
-    source ${HOME}/.bash_profile
+
+    tinysay "Installing Blade Plugin for ${ink_yellow}WP-CLI${ink_grey}"
+    tinysay "This will allow you to compile, wipe, or clear the blade cache files used in Sage 9."
+    php -d memory_limit=-1 "$(which wp)" package install git@github.com:alwaysblank/blade-generate.git
+
+    source "${HOME}"/.bash_profile
 
 }
 
@@ -329,18 +328,18 @@ setup_mysql() {
 # Installs valet
 install_valet() {
     if ! type composer >/dev/null 2>&1; then
-        tinysay "Beginning the installation of laravel/valet, your dev env."
+        tinysay "Beginning the installation of ${ink_yellow}laravel/valet${ink_grey}, your dev env."
         composer global require laravel/valet
         if ! type valet >/dev/null 2>&1; then
             tinysay "Valet's downloaded, let's install it."
             valet install
             sudo valet trust
-            valet domain ${getTLS}
-            cd ${path}
+            valet domain "${getTLS}"
+            cd "${path}" || exit
             if [[ ! -d ${sitepath}  ]]; then
                 mkdir Sites
             fi
-            cd ${sitepath}
+            cd "${sitepath}" || exit
             valet park
             sucsay "You now have a Sites directory located at ${sitepath}. You can create new folders within here, and valet will serve them in your browser using the ${getTLS} as your TLS."
         fi
@@ -349,21 +348,21 @@ install_valet() {
 
 # Installs phpmyadmin and adds a syslink to the Sites directory
 install_phpmyadmin() {
-    cd ${sitepath}
+    cd "${sitepath}" || exit
     brew install phpmyadmin
     ln -s /usr/local/share/phpmyadmin .
     valet secure phpmyadmin
 }
 
 # Main Script Start
-# cache_sudo_password
-# collect_install_parameters
-# install_homebrew
-# install_homebrew_packages
-# brew_error_checks
-# bash_profile_write
-# install_npm_packages
-# install_wpcli
-# setup_mysql
-# install_valet
-# install_phpmyadmin
+cache_sudo_password
+collect_install_parameters
+install_homebrew
+install_homebrew_packages
+brew_error_checks
+bash_profile_write
+install_npm_packages
+install_wpcli
+setup_mysql
+install_valet
+install_phpmyadmin
